@@ -1,0 +1,35 @@
+PRELIMINARY
+1. Sketch app design.
+2. Gather assets.
+3. Start a webpack project
+4. Configure webpack
+5. Connect to remote repo.
+
+PART A: LOGIC
+1. Create blueprints
+    a. A todo item blueprint for each list 
+    b. A folder blueprint for folder or project
+    c. A folder manager to manage folders
+    d. A list blueprint to manage todo items
+2. Create local storage methods
+    a. Create a save method
+    b. Create a retrieve method
+3. Create sample data to use, two lists
+
+PART B: CONTENT
+1. Create Static content
+    a. Create boilerplate.
+    b. Create Header section.
+    c. Create the main portion.
+    d. Create the footer portion
+2. Create basic style to get a feel of how 
+things are suppose to be. 
+    a. Create a general style.
+    b. Make it responsive. 
+3. Manipulate content
+    a. Add Date, with date-fns
+    b. Create a Sort method to get Sort icon to work
+    c. Create Group method to make group work
+    d. Ensure that when Sort drop pops, Group cannot & vice versa
+    e. Create search method for the search bar
+4.
