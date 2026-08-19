@@ -1,7 +1,10 @@
-/* Sidebar */
+/* SIDEBAR RULES */
+
 #sidebar {
   position: fixed;
-  inset: 0 auto 0 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
   width: var(--sidebar-width);
   background-color: var(--bg-accent);
   transform: translateX(-100%);
@@ -11,6 +14,7 @@
   padding: 1rem;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 #sidebar.active {
