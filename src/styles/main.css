@@ -155,7 +155,7 @@
   opacity: 1;
 }
 
-#addBtn {
+#add-btn {
   height: 2.1rem;
   padding: 0 18px;
   border-radius: 6px;
@@ -168,7 +168,7 @@
   transition: all 0.15s ease;
 }
 
-#addBtn:hover {
+#add-btn:hover {
   border-color: transparent;
   background-color: var(--accent-hover);
   color: white;
