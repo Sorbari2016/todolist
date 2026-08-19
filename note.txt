@@ -20,8 +20,8 @@ PART B: CONTENT
 1. Create Static content
     a. Create boilerplate.
     b. Create Header section.
-    c. Create the main portion.
-    d. Create the footer portion
+    c. Create the Sidear portion.
+    d. Create the Main portion
 2. Create basic style to get a feel of how 
 things are suppose to be. 
     a. Create a general style.
