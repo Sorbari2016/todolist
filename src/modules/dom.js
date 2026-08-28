@@ -73,7 +73,7 @@ function renderMainArea() {
           </div>
           <div class="flex-container">
             <div class="add-task-container">
-              <span class="add-task-top">
+              <div class="add-task-top">
                 <input type="checkbox" class="checklist-btn" />
                 <input
                   type="text"
@@ -82,8 +82,8 @@ function renderMainArea() {
                   maxlength="255"
                   placeholder="Add a task"
                 />
-              </span>
-              <span class="add-task-bottom">
+              </div>
+              <div class="add-task-bottom">
                 <div class="add-task-icons">
                   <ul>
                     <li class="item main-item">
@@ -99,12 +99,12 @@ function renderMainArea() {
                       />
                     </li>
                     <li class="item main-item">
-                      <img src="${repeatIcon}" alt="repeat icon/>
+                      <img src="${repeatIcon}" alt="repeat icon"/>
                     </li>
                   </ul>
                 </div>
                 <button id="add-btn" type="submit">Add</button>
-              </span>
+              </div>
             </div>
             <div class="added-task-list">
               <ul></ul>
