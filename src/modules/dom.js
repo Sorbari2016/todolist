@@ -9,6 +9,7 @@ import calendarIcon from "../../assets/icons/calendar.png";
 import notificationIcon from "../../assets/icons/bell.png";
 import repeatIcon from "../../assets/icons/repeat.png";
 import { renderMyProjects, addProject } from "./branch";
+import { format } from "date-fns";
 
 // Hamburger method
 // select elements
@@ -228,5 +229,10 @@ document.querySelectorAll(".click-btn").forEach((btn) => {
     }
   });
 });
+
+// Create dynamic date content
+const now = new Date();
+const currentDay = `${format(now, "eeee")}, ${format(now, "MMMM d")}`;
+mainArea.querySelector(".today-date").textContent = currentDay;
 
 export { clearMainArea, mainArea };
