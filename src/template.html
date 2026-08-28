@@ -96,9 +96,12 @@
           </div>
           <div class="bottom-sidebar">
             <div class="projects">
-              <button type="button">My Projects</button>
-              <button type="button">
+              <button type="button" id="my-projects" class="click-btn">
+                My Projects
+              </button>
+              <button type="button" class="click-btn">
                 <img
+                  id="add-project"
                   src="../assets/icons/project-add.png"
                   alt="add project icon"
                 />
@@ -146,13 +149,13 @@
               <div class="toolbar-right">
                 <ul class="toolbar-nav">
                   <li class="item main-item">
-                    <button id="sort" class="btn click">
+                    <button id="sort" class="btn click-btn">
                       <img src="/assets/icons/arrow.png" alt="sort icon" />
                       Sort
                     </button>
                   </li>
                   <li class="item main-item">
-                    <button id="group" class="btn click">
+                    <button id="group" class="btn click-btn">
                       <img
                         src="../assets/icons/group-icon.png"
                         alt="group icon"
@@ -197,7 +200,9 @@
                     </li>
                   </ul>
                 </div>
-                <button id="add-btn" type="submit">Add</button>
+                <button id="add-btn" type="submit" class="click-btn">
+                  Add
+                </button>
               </div>
             </div>
             <div class="added-task-list">
