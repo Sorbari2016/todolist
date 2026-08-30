@@ -1,5 +1,8 @@
 // CLICK BUTTONS DOM
-import { clearMainArea, mainArea } from "./dom";
+import { clearMainArea, mainArea, createModal } from "./dom";
+import { sortIcon, calendarIcon, priorityIcon } from "./dom";
+import categoryIcon from "../../assets/icons/category.png";
+import originDateIcon from "../../assets/icons/creation.png";
 
 // Create a dom method to render projects
 function renderMyProjects(projects) {
@@ -69,6 +72,29 @@ function addProject() {
   handleSubmit(projects, form, plusBtn);
 }
 
+// Create a function to show, & remove sort popup content
+function sort() {
+  // create list details
+  const details = new List();
+  details.addListItem(sortIcon, "Alphabetically", "sort icon");
+  details.addListItem(calendarIcon, "Deadline", "deadline icon");
+  details.addListItem(priorityIcon, "Priority", "priority icon");
+  details.addListItem(originDateIcon, "Creation Date", "original date icon");
+
+  // create modal
+  createModal("sort", details.list);
+}
+
+// Create a function to show, & renove the group pop up content
+function group() {
+  // create list details
+  const details = new List();
+  details.addListItem(categoryIcon, "Categories", "categories icons");
+
+  // create modal
+  createModal("group", details.list);
+}
+
 // UTILITIES
 
 // Create add Project form
@@ -119,4 +145,43 @@ function handleSubmit(parent, oldElement, newElelemt) {
   });
 }
 
-export { renderMyProjects, addProject };
+// Create a method to construct a list item for modal
+function createListItem(image, content, alt) {
+  const htmlString = `
+      <li class="item">
+          <img src="${image}" alt="${alt}">
+        ${content}
+      </li>
+  `;
+  const template = document.createElement("template");
+  template.innerHTML = htmlString.trim();
+
+  return template.content.firstElementChild;
+}
+
+// Create a class for list item details
+class ListItem {
+  constructor(image, content, alt) {
+    this.image = image;
+    this.content = content;
+    this.alt = alt;
+  }
+}
+
+// Create a class for the List
+class List {
+  constructor() {
+    this.list = [];
+  }
+
+  addListItem(image, content, alt) {
+    if (!image || !content || !alt) {
+      throw new Error("Image, content and alt of item are required!");
+    }
+
+    const newItem = new ListItem(image, content, alt);
+    this.list.push(newItem);
+  }
+}
+
+export { renderMyProjects, addProject, sort, group, createListItem };

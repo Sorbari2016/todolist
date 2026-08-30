@@ -352,3 +352,70 @@
     max-width: 100%;
   }
 }
+
+/* SORT & MAIN POP UPS */
+.toolbar-nav .main-item {
+  position: relative;
+}
+
+/* The dropdown card */
+.card {
+  position: absolute;
+  top: calc(100% + 6px);
+  z-index: 100;
+  min-width: 10rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 0.5rem 0;
+  font-family: inherit;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.card h4 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.35rem 1rem 0.4rem;
+  margin: 0;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.card hr {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  margin: 0 0 0.25rem;
+}
+
+/* Menu list */
+.card ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.card .item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.15s ease;
+}
+
+.card .item:hover {
+  background: var(--bg-accent, #a9b5df);
+}
+
+/* Mobile: align to the right instead of centering */
+@media (max-width: 899px) {
+  .card {
+    left: auto;
+    right: 0;
+    transform: none;
+  }
+}

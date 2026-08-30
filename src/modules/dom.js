@@ -8,7 +8,13 @@ import groupIcon from "../../assets/icons/group-icon.png";
 import calendarIcon from "../../assets/icons/calendar.png";
 import notificationIcon from "../../assets/icons/bell.png";
 import repeatIcon from "../../assets/icons/repeat.png";
-import { renderMyProjects, addProject } from "./branch";
+import {
+  renderMyProjects,
+  addProject,
+  sort,
+  group,
+  createListItem,
+} from "./branch";
 import { format } from "date-fns";
 
 // Hamburger method
@@ -235,4 +241,54 @@ const now = new Date();
 const currentDay = `${format(now, "eeee")}, ${format(now, "MMMM d")}`;
 mainArea.querySelector(".today-date").textContent = currentDay;
 
-export { clearMainArea, mainArea };
+// Create a reusable modal function
+function createModal(elementId, listDetails) {
+  // select clicked element
+  const element = document.getElementById(elementId);
+
+  // disable the button
+  element.disabled = true;
+
+  // check if element exist in the dom
+  if (!element) throw new Error("Element not found!");
+
+  // create div element and give it a class card
+  const card = document.createElement("div");
+  card.classList.add("card");
+
+  // create a heading text
+  const heading = elementId[0].toUpperCase() + elementId.slice(1);
+
+  // create the card html
+  card.innerHTML = `
+    <h4>${heading} by </h4>
+    <hr/>
+    <ul class="${elementId}_menu" 
+    </ul>
+  `;
+  const list = card.querySelector("ul"); // add list items, & append to the parent, ul
+  const listItems = listDetails.forEach((item) => {
+    const listItem = createListItem(item.image, item.content, item.alt); // create li markup
+    list.appendChild(listItem); // append to ul
+  });
+
+  // attach the card to the list that hods the element
+  const parentElement = element.closest(".main-item");
+  parentElement.appendChild(card);
+
+  // create event handler for outside click
+  document.addEventListener("click", (e) => {
+    if (!parentElement.contains(e.target)) {
+      // remove if card is still attached or exist
+      if (parentElement.contains(card)) {
+        parentElement.removeChild(card);
+      }
+
+      // enable button
+      element.disabled = false;
+    }
+  });
+}
+
+export { clearMainArea, mainArea, createModal };
+export { sortIcon, calendarIcon, priorityIcon };
