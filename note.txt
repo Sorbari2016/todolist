@@ -40,10 +40,29 @@ things are suppose to be.
     a. Add a btn-click or click-btn class to all the buttons that need it.
     b. Create Handler that would manage the rest click events.
     c. Create Switch statement that would manage the clicks.
-7. Manipulate content
+7. Manipulate content I
     a. Add Date, with date-fns
     b. Create a Sort method to get Sort icon to work
     c. Create Group method to make group work
     d. Ensure that when Sort drop pops, Group cannot & vice versa
     e. Create search method for the search bar
-
+8. Manipulate content II
+    a Create a reusable createTaskTile markup method
+    b.Create method to add task via the main area add button
+    c. Create getUpcomingTasks method to get tiles of upcoming tasks
+    d. Create getCompletedTasks method to get tiles of completed tasks
+    e. Create getTodayTasksk method to get tasks that are completed
+9. Manipulate content III
+    a. Add the content of number of upcoming tasks
+    b. Add the content of number of completed tasks
+    c. Add the content of number of today tasks
+10. Complete Add task, Project
+    a. Complete logic and method to add task via the Add Task Sidebar button
+    b. Complete logic and method to add task via the main area
+    c. Complete logic and method to add project via Sidebar
+    d. Complete logic and method to add logic via the main area
+11. Complete Update Tasks
+    a. Create handler to handle task tile button click
+    b. Create markup method update task
+    c. Add logic to update task
+12. Complete Delete task method

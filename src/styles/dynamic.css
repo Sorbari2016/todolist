@@ -1,0 +1,8 @@
+/* RULES FOR DYNAMIC CONTENTS IN THE MAIN AREA */
+.strikethrough {
+  text-decoration: line-through;
+}
+
+.expand .task-item-title {
+  font-weight: 700;
+}
