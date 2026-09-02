@@ -196,11 +196,12 @@ class TodoList {
     return this.getAll().filter((todo) => todo.dueDate && todo.dueDate > today);
   }
 
-  // create a method to find a searched tasks
-  filterTasks(query) {
-    // trim & split query
-    const queryLetters = query.trim().split("");
+  // create method to filter task if character is found in the title
+  filterByChar(char) {
+    return this.getAll().filter((todo) =>
+      todo.title.toLowerCase().includes(char.toLowerCase()),
+    );
   }
 }
 
-export { TodoList };
+export const todoList = new TodoList();

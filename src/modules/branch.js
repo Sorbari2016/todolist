@@ -4,6 +4,7 @@ import { sortIcon, calendarIcon, priorityIcon } from "./dom";
 import categoryIcon from "../../assets/icons/category.png";
 import originDateIcon from "../../assets/icons/creation.png";
 import closeIcon from "../../assets/icons/close-icon.png";
+import { todoList } from "./template";
 
 // Create a dom method to render projects
 function renderMyProjects(projects) {
@@ -143,11 +144,40 @@ function search() {
         <p class="query-text">
           Searching for "${query}"
         </p>
-        <div class="queries">
-          <ul></ul> 
+        <div class="query-result">
         </div>
       </div>
     `;
+
+    // find lists
+    const cleanQuery = query.trim();
+    const matchedTasks = todoList.filterByChar(cleanQuery);
+
+    // select the query-result contaianer
+    const queiriesContainer = mainArea.querySelector(".query-result");
+
+    // check if there are matches
+    if (matchedTasks.length > 0) {
+      // const create an unordered list, & tasks class
+      const list = document.createElement("ul");
+      list.setAttribute("class", "tasks");
+
+      matchedTasks.forEach((task) => {
+        // create a list item
+        // const listItem = createTaskTile(task);
+        // append to underored list element
+        // list.appendChild(listItem);
+      });
+
+      // append unordered list to the queries div container
+      queiriesContainer.appendChild(list);
+    }
+
+    // when there is not match
+    const paragraph = document.createElement("p");
+    paragraph.classList.add("no-tasks");
+    paragraph.textContent = "No task was found";
+    queiriesContainer.appendChild(paragraph);
   });
 
   // add event delegation to listen close button click
