@@ -97,6 +97,30 @@ img[alt="search icon"] {
   background-color: var(--bg-accent);
 }
 
+#search-btn,
+#close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  padding: 2px;
+  border-radius: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+
+#search-btn:hover,
+#close-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+#search-btn:active,
+#close-btn:active {
+  background: rgba(0, 0, 0, 0.12);
+}
+
 .search-tab input {
   border: 0;
   background: transparent;

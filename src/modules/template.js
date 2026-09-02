@@ -195,6 +195,12 @@ class TodoList {
     today.setHours(23, 59, 59, 999);
     return this.getAll().filter((todo) => todo.dueDate && todo.dueDate > today);
   }
+
+  // create a method to find a searched tasks
+  filterTasks(query) {
+    // trim & split query
+    const queryLetters = query.trim().split("");
+  }
 }
 
 export { TodoList };

@@ -163,7 +163,7 @@ function getAddTaskForm() {
         <div class="form-item">
             <img src="${priorityIcon}" alt="priority icon">
             <select name="priority" id="priority">
-                <option value="">--Select a priority level</option>
+                <option value="">--Select a priority level--</option>
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
                 <option value="high">High</option>
@@ -246,11 +246,11 @@ function createModal(elementId, listDetails) {
   // select clicked element
   const element = document.getElementById(elementId);
 
-  // disable the button
-  element.disabled = true;
-
   // check if element exist in the dom
   if (!element) throw new Error("Element not found!");
+
+  // disable the button
+  element.disabled = true;
 
   // create div element and give it a class card
   const card = document.createElement("div");
@@ -290,5 +290,5 @@ function createModal(elementId, listDetails) {
   });
 }
 
-export { clearMainArea, mainArea, createModal };
+export { clearMainArea, mainArea, createModal, renderMainArea };
 export { sortIcon, calendarIcon, priorityIcon };

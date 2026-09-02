@@ -1,8 +1,9 @@
 // CLICK BUTTONS DOM
-import { clearMainArea, mainArea, createModal } from "./dom";
+import { clearMainArea, mainArea, createModal, renderMainArea } from "./dom";
 import { sortIcon, calendarIcon, priorityIcon } from "./dom";
 import categoryIcon from "../../assets/icons/category.png";
 import originDateIcon from "../../assets/icons/creation.png";
+import closeIcon from "../../assets/icons/close-icon.png";
 
 // Create a dom method to render projects
 function renderMyProjects(projects) {
@@ -93,6 +94,108 @@ function group() {
 
   // create modal
   createModal("group", details.list);
+}
+
+search();
+
+// Create search markup function
+function search() {
+  // select the search tab container
+  const searchTab = document.querySelector(".search-tab");
+
+  // select the input element
+  const searchInput = searchTab.querySelector("#search");
+
+  // add a focus handler to the iput element
+  searchInput.addEventListener("focus", () => {
+    const existingBtn = searchTab.querySelector("#close-btn");
+    // only run the creation code if it isnt there
+    if (!existingBtn) {
+      // add a close button to the search tab,  & placeholder
+      const closeBtn = document.createElement("button");
+      closeBtn.setAttribute("id", "close-btn");
+
+      // add placeholder to the input
+      searchInput.placeholder = "Search";
+
+      // create icon, and attach to the close btn
+      const img = document.createElement("img");
+      img.src = closeIcon;
+      img.alt = "close icon";
+      closeBtn.appendChild(img);
+
+      // attached the button to the search tab
+      searchTab.appendChild(closeBtn);
+    }
+  });
+
+  // add input evnt handler
+  searchInput.addEventListener("input", (e) => {
+    // get user input
+    const query = searchInput.value;
+
+    // clear the man area
+    clearMainArea();
+
+    // rebuild main area
+    mainArea.innerHTML = `
+      <div class="search-container">
+        <p class="query-text">
+          Searching for "${query}"
+        </p>
+        <div class="queries">
+          <ul></ul> 
+        </div>
+      </div>
+    `;
+  });
+
+  // add event delegation to listen close button click
+  searchTab.addEventListener("click", (e) => {
+    // check if the click target or its parent image is the close button
+    const closeBtn = e.target.closest("#close-btn");
+
+    if (closeBtn) {
+      // check if an query was made
+      const toolbar = mainArea.querySelector(".toolbar");
+
+      if (mainArea.contains(toolbar)) {
+        // remove close button, reset input placeholder
+        closeBtn.remove();
+        searchInput.placeholder = "";
+      } else {
+        // remove close button, reset input placeholder, & value
+        closeBtn.remove();
+        searchInput.placeholder = "";
+        searchInput.value = "";
+
+        // clear main area
+        clearMainArea();
+
+        // re-render main area
+        renderMainArea();
+      }
+    }
+  });
+
+  // handle clicks outside the search tab
+  document.addEventListener("click", (e) => {
+    // check if the cick is inside the search tab
+    const isClickInside = searchTab.contains(e.target);
+
+    // check if input is empty
+    const isInputEmpty = searchInput.value === "";
+
+    if (!isClickInside && isInputEmpty) {
+      // check is close button exists
+      const closeBtn = searchTab.querySelector("#close-btn");
+
+      if (closeBtn) {
+        searchInput.placeholder = "";
+        closeBtn.remove();
+      }
+    }
+  });
 }
 
 // UTILITIES
