@@ -119,6 +119,16 @@ function renderMainArea() {
             </div>
           </div>
   `;
+
+  // add listeners to Sort & Group buttons
+  const toolbar = document.querySelector(".toolbar");
+  toolbar.querySelectorAll("button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (btn.id === "sort") {
+        sort();
+      } else if (btn.id === "group") group();
+    });
+  });
 }
 
 // Add Event delegation on the sidebar top section
@@ -263,11 +273,11 @@ function createModal(elementId, listDetails) {
   card.innerHTML = `
     <h4>${heading} by </h4>
     <hr/>
-    <ul class="${elementId}_menu" 
+    <ul class="${elementId}_menu"> 
     </ul>
   `;
   const list = card.querySelector("ul"); // add list items, & append to the parent, ul
-  const listItems = listDetails.forEach((item) => {
+  listDetails.forEach((item) => {
     const listItem = createListItem(item.image, item.content, item.alt); // create li markup
     list.appendChild(listItem); // append to ul
   });
@@ -290,5 +300,12 @@ function createModal(elementId, listDetails) {
   });
 }
 
-export { clearMainArea, mainArea, createModal, renderMainArea };
-export { sortIcon, calendarIcon, priorityIcon };
+export {
+  clearMainArea,
+  mainArea,
+  createModal,
+  renderMainArea,
+  sortIcon,
+  calendarIcon,
+  priorityIcon,
+};
