@@ -317,4 +317,12 @@ class List {
   }
 }
 
-export { renderMyProjects, addProject, sort, group, createListItem };
+export {
+  renderMyProjects,
+  addProject,
+  sort,
+  group,
+  createListItem,
+  handleCancel,
+  handleSubmit,
+};

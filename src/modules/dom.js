@@ -16,6 +16,7 @@ import {
   createListItem,
 } from "./branch";
 import { format } from "date-fns";
+import { renderGroupedTasks } from "./node";
 
 // Hamburger method
 // select elements
@@ -140,6 +141,12 @@ function renderMainArea() {
 
       if (buttonID === "add-task-sidebar") {
         getAddTaskForm();
+      } else if (buttonID === "upcoming") {
+        renderGroupedTasks("Upcoming");
+      } else if (buttonID === "completed") {
+        renderGroupedTasks("Completed");
+      } else if (buttonID === "today-tasks") {
+        renderGroupedTasks("Today");
       }
     }
   },

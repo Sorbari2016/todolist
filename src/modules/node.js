@@ -1,5 +1,8 @@
 // Imports
 import ImportantIcon from "../../assets/icons/important_icon.png";
+import { handleCancel, handleSubmit } from "./branch";
+import { format } from "date-fns";
+import { clearMainArea, mainArea } from "./dom";
 
 // Create reusable markup method to create a task tile
 function createTaskTile(task) {
@@ -56,4 +59,110 @@ function createTaskTile(task) {
   return template.content.firstElementChild;
 }
 
-export { createTaskTile };
+// *
+// Today's tasks : overdue tasks, & just today's tasks
+// Completed tasks: overdue tasks, & all completed not more than one week before today
+// Upcoming tasks: Overdue tasks, today's tasks, & task for the next 7 days which are not completed.
+
+// Create a method to render grouped tasks
+function renderGroupedTasks(groupTitle, overdueTasks, groupedTasks = []) {
+  // clear main area
+  clearMainArea();
+
+  // build markup
+  const groupedTasksContainer = document.createElement("div");
+  groupedTasksContainer.classList.add("grouped-task-container");
+
+  const now = new Date();
+  const currentDay = `${format(now, "eeee")}, ${format(now, "MMMM d")}`;
+
+  groupedTasksContainer.innerHTML = `
+    <h1 class="group-title"> ${groupTitle}</h1>
+    <div class="no-of-tasks">${groupedTasks.length}</div>
+    <div class="current-date">${currentDay}</div> 
+    <hr/>
+  `;
+
+  // render grouped tasks
+  if (groupedTasks.length > 0) {
+    const section = document.createElement("section");
+    section.classList.add("grouped-tasks");
+    groupedTasks.forEach((task) => {
+      createTaskTile(task);
+    });
+  }
+
+  mainArea.appendChild(groupedTasksContainer);
+}
+
+// Create a method to render overdue tasks
+function renderOverdueTasks(tasks = []) {
+  // create the main container section
+  const section = document.createElement("section");
+  section.className = "overdue";
+
+  // create heading and append to section
+  const heading = document.createElement("h2");
+  heading.textContent = "Overdue";
+  section.appendChild(heading);
+
+  // check if overdue tasks is empty, & render a add task button
+  if (tasks.length === 0) {
+    const addTaskBtn = document.createElement("button");
+    addTaskBtn.type = "button";
+    addTaskBtn.className = "add-task-btn";
+
+    section.appendChild(addTaskBtn);
+
+    // create form
+    const form = createConciseAddTaskForm();
+
+    // add listener to render form when button is clicked
+    addTaskBtn.addEventListener("click", () => {
+      form.classList.add("open");
+      section.replaceChild(form, addTaskBtn);
+    });
+
+    // handle cancel button click
+    handleCancel(section, form, addTaskBtn);
+
+    // handle submit button click
+    handleSubmit(section, form, addTaskBtn);
+
+    return section;
+  }
+
+  // create list container
+  const ul = document.createElement("ul");
+  ul.className = "task-list";
+
+  // create overdue tasks tiles
+  tasks.forEach((task) => {
+    const tile = createTaskTile(task);
+    ul.appendChild(tile);
+  });
+
+  section.appendChild(ul);
+  return section;
+}
+
+// UTILITY
+// Create a method for generation of a concise add task form.
+function createConciseAddTaskForm() {
+  const form = document.createElement("form");
+  form.className = "add-task-form-concise";
+  form.innerHTML = `
+        <h3>Create a New Task</h3>
+        <div class="form-item">
+            <input type="checkbox" id="checkbox" name="checklist">
+            <input type="text" name="title" id="title" placeholder="Read for 3 hours..." required>
+        </div>
+        <div class="form-actions">
+            <button  type = "button" class="cancel-btn">Cancel</a>
+            <button type = "submit" class="add-task-btn">Add</button>
+        </div>
+      `;
+  return form;
+}
+
+export { createTaskTile, renderGroupedTasks };

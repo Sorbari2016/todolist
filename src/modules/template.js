@@ -196,6 +196,17 @@ class TodoList {
     return this.getAll().filter((todo) => todo.dueDate && todo.dueDate > today);
   }
 
+  // overdue tasks are tasks whose duedate is behind today, & is not yet completed
+  getAllOverdueTasks() {
+    const todayStr = new Date().toDateString();
+    return this.getAll().filter(
+      (todo) =>
+        todo.dueDate &&
+        todo.dueDate.toDateString() < todayStr &&
+        todo.checkList === false,
+    );
+  }
+
   // create method to filter task if character is found in the title
   filterByChar(char) {
     return this.getAll().filter((todo) =>
