@@ -171,13 +171,6 @@ ul.tasks {
   margin: 0.5rem 0 1rem;
 }
 
-.add-task-form-concise h3 {
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin: 0;
-  text-align: center;
-}
-
 .add-task-form-concise .form-item {
   display: flex;
   align-items: center;

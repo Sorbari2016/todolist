@@ -235,8 +235,8 @@ function getAddTaskForm() {
   });
 }
 
-// mock data
-const projects = [{ title: "Fuck Suanle" }, { title: "Pray" }];
+// Get user created folders
+const folders = todoList.listManager.directory;
 
 // Handle buttons with the class click-btn
 document.querySelectorAll(".click-btn").forEach((btn) => {
@@ -245,7 +245,7 @@ document.querySelectorAll(".click-btn").forEach((btn) => {
 
     switch (buttonID) {
       case "my-projects":
-        renderMyProjects(projects);
+        renderMyProjects(folders);
         break;
       case "add-project":
         addProject();

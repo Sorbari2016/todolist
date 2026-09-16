@@ -34,7 +34,7 @@ function renderMyProjects(projects) {
     const item = document.createElement("li");
     // each list should be a tile
     item.classList.add("item");
-    item.textContent = project.title;
+    item.textContent = project.name;
 
     projectList.appendChild(item);
   });

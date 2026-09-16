@@ -176,7 +176,6 @@ function createConciseAddTaskForm() {
   const form = document.createElement("form");
   form.className = "add-task-form-concise";
   form.innerHTML = `
-        <h3>Create a New Task</h3>
         <div class="form-item">
             <input type="checkbox" id="checkbox" name="checklist">
             <input type="text" name="title" id="title" placeholder="Read for 3 hours..." required>

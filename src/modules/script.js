@@ -1,4 +1,4 @@
 // APP LOGIC
 import { todoList } from "./template";
 
-console.log(todoList.getAllOverdueTasks());
+console.log(todoList.listManager.directory);
