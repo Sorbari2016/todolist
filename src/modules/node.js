@@ -100,7 +100,7 @@ function renderGroupedTasks(groupTitle, groupedTasks = []) {
     // create a section markup
     const section = document.createElement("section");
     section.classList.add("grouped-tasks");
-    section.innerHTML = `<h3>Grouped Tasks</h3>`;
+    section.innerHTML = `<h3>Grouped</h3>`;
 
     // create an unorder list container,  attach to the section
     const tasks = document.createElement("ul");
