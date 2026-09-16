@@ -3,6 +3,7 @@ import ImportantIcon from "../../assets/icons/important_icon.png";
 import { handleCancel, handleSubmit } from "./branch";
 import { format } from "date-fns";
 import { clearMainArea, mainArea } from "./dom";
+import { todoList } from "./template";
 
 // Create reusable markup method to create a task tile
 function createTaskTile(task) {
@@ -11,31 +12,38 @@ function createTaskTile(task) {
 
   // create markup
   const htmlString = `
-        <li class="item task-item">
-            <div class="tile">
-                <span class="checkbox">
-                    <input type="checkbox" id="${checkboxId}" class="checklist-btn">
-                </span>
-                <button type="button" class="task-item-title-wrapper">
-                        <span class="task-item-title">${task.title}</span>
-                        <span class="meta-data-info">Tasks</span>
-                </button>
-                <button type="button" class="importance-btn">
-                    <img src="${ImportantIcon}" alt="importance icon">
-                </button>
-            </div>
-        </li>
-    `;
+    <li class="item task-item">
+      <div class="tile">
+        <span class="checkbox">
+          <input type="checkbox" id="${checkboxId}" class="checklist-btn">
+        </span>
+        <button type="button" class="task-item-title-wrapper">
+          <span class="task-item-title">${task.title}</span>
+          <span class="meta-data-info">Tasks</span>
+        </button>
+        <button type="button" class="importance-btn">
+          <img src="${ImportantIcon}" alt="importance icon">
+        </button>
+      </div>
+    </li>
+  `;
 
-  const tile = document.querySelector(".tile");
+  // convert html string to actual dom elements
+  const template = document.createElement("template");
+  template.innerHTML = htmlString.trim();
 
-  // get checkbox element, & title text
-  const checkboxEl = tile.querySelector(`#${checkboxId}`);
-  const titleEl = tile.querySelector(".task-item-title");
+  // select the list item
+  const taskItem = template.content.firstElementChild;
+
+  // select markup elements
+  const tile = taskItem.querySelector(".tile");
+  const checkboxEl = taskItem.querySelector(`#${checkboxId}`);
+  const titleEl = taskItem.querySelector(".task-item-title");
+  const tileBtn = taskItem.querySelector(".task-item-title-wrapper");
 
   // handle checkbox click
   checkboxEl.addEventListener("change", () => {
-    // toggle checklist
+    // toggle checklists
     task.toggleCheckList();
   });
 
@@ -46,17 +54,14 @@ function createTaskTile(task) {
   }
 
   // handle tile click for expansion
-  const tileBtn = tile.querySelector(".task-item-title-wrapper");
   tileBtn.addEventListener("click", () => {
     tile.classList.add("expanded");
     // view task details
-    //viewTaskDetails(task)
+    // viewTaskDetails(task)
   });
 
-  const template = document.createElement("template");
-  template.innerHTML = htmlString.trim();
-
-  return template.content.firstElementChild;
+  // return markup
+  return taskItem;
 }
 
 // *
@@ -65,7 +70,7 @@ function createTaskTile(task) {
 // Upcoming tasks: Overdue tasks, today's tasks, & task for the next 7 days which are not completed.
 
 // Create a method to render grouped tasks
-function renderGroupedTasks(groupTitle, overdueTasks, groupedTasks = []) {
+function renderGroupedTasks(groupTitle, groupedTasks = []) {
   // clear main area
   clearMainArea();
 
@@ -76,19 +81,37 @@ function renderGroupedTasks(groupTitle, overdueTasks, groupedTasks = []) {
   const now = new Date();
   const currentDay = `${format(now, "eeee")}, ${format(now, "MMMM d")}`;
 
+  const overdueTasks = renderOverdueTasks(todoList.getAllOverdueTasks());
+
   groupedTasksContainer.innerHTML = `
-    <h1 class="group-title"> ${groupTitle}</h1>
-    <div class="no-of-tasks">${groupedTasks.length}</div>
-    <div class="current-date">${currentDay}</div> 
+    <div class="group-header">
+      <h1 class="group-title"> ${groupTitle}</h1>
+      <div class="no-of-tasks">${groupedTasks.length}</div>
+      <div class="current-date">${currentDay}</div>
+    </div>
     <hr/>
   `;
 
+  // attach overdue tasks
+  groupedTasksContainer.appendChild(overdueTasks);
+
   // render grouped tasks
   if (groupedTasks.length > 0) {
+    // create a section markup
     const section = document.createElement("section");
     section.classList.add("grouped-tasks");
+    section.innerHTML = `<h3>Grouped Tasks</h3>`;
+
+    // create an unorder list container,  attach to the section
+    const tasks = document.createElement("ul");
+    tasks.classList.add("tasks");
+    section.appendChild(tasks);
+
+    groupedTasksContainer.appendChild(section); // append section to the group container
+
+    // loop through the grouped tasks and create a list tile for each
     groupedTasks.forEach((task) => {
-      createTaskTile(task);
+      tasks.appendChild(createTaskTile(task));
     });
   }
 
@@ -102,7 +125,7 @@ function renderOverdueTasks(tasks = []) {
   section.className = "overdue";
 
   // create heading and append to section
-  const heading = document.createElement("h2");
+  const heading = document.createElement("h3");
   heading.textContent = "Overdue";
   section.appendChild(heading);
 
@@ -111,6 +134,7 @@ function renderOverdueTasks(tasks = []) {
     const addTaskBtn = document.createElement("button");
     addTaskBtn.type = "button";
     addTaskBtn.className = "add-task-btn";
+    addTaskBtn.textContent = "Add Task";
 
     section.appendChild(addTaskBtn);
 

@@ -17,6 +17,7 @@ import {
 } from "./branch";
 import { format } from "date-fns";
 import { renderGroupedTasks } from "./node";
+import { todoList } from "./template";
 
 // Hamburger method
 // select elements
@@ -142,11 +143,11 @@ function renderMainArea() {
       if (buttonID === "add-task-sidebar") {
         getAddTaskForm();
       } else if (buttonID === "upcoming") {
-        renderGroupedTasks("Upcoming");
+        renderGroupedTasks("Upcoming", todoList.getAllUpcomingTasks());
       } else if (buttonID === "completed") {
-        renderGroupedTasks("Completed");
+        renderGroupedTasks("Completed", todoList.getAllCompletedTasks());
       } else if (buttonID === "today-tasks") {
-        renderGroupedTasks("Today");
+        renderGroupedTasks("Today", todoList.getAllTodayTasks());
       }
     }
   },
@@ -202,6 +203,9 @@ function getAddTaskForm() {
 
   // add event handler, for the submit button
   form.addEventListener("submit", (e) => {
+    // prevent form submitiing
+    e.preventDefault();
+
     // disable checkbox
     form.querySelector("#checkbox").disabled = true;
 
@@ -209,7 +213,7 @@ function getAddTaskForm() {
     const title = form.querySelector("#title").value.trim();
     const desc = form.querySelector("#desc").value.trim();
     const dueDate = form.querySelector("#due-date").value.trim();
-    const note = form.querySelector("#note").value.trim();
+    const notes = form.querySelector("#note").value.trim();
     const priorityLevel = form.querySelector("#priority").value.trim();
 
     // ensure task has a title
@@ -219,7 +223,10 @@ function getAddTaskForm() {
     }
 
     // add task
-    // update local storage
+    todoList.add(title, desc, dueDate, priorityLevel, notes);
+
+    // reset form
+    form.reset();
   });
 }
 

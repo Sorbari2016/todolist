@@ -1,4 +1,4 @@
-import { saveToLocalStorage } from "./storage";
+import { loadFromLocalStorage, saveToLocalStorage } from "./storage";
 
 // Create list item blueprint
 class Todo {
@@ -12,6 +12,22 @@ class Todo {
     this.notes = notes;
     this.checkList = false; // true means completed
     this.updatedAt = new Date();
+  }
+
+  // add a static method to rebuild a todo instance from local storage plain data
+  static fromData(data) {
+    const todo = new Todo(
+      data.title,
+      data.desc,
+      data.dueDate,
+      data.priority,
+      data.notes,
+    );
+    todo.id = data.id;
+    todo.createdAt = new Date(data.createdAt);
+    todo.updatedAt = new Date(data.updatedAt);
+    todo.checkList = data.checkList;
+    return todo;
   }
 
   changePriority(newLevel) {
@@ -41,6 +57,20 @@ class Folder {
     this.name = name;
     this.lists = [];
     this.updatedAt = new Date();
+  }
+
+  // add a static method to rebuild a folder instance from local storage plain data
+  static fromData(data) {
+    const folder = new Folder(data.name);
+    folder.id = data.id;
+    folder.createdAt = new Date(data.createdAt);
+    folder.updatedAt = new Date(data.updatedAt);
+
+    // deeply rehydrate the children inside this folder
+    folder.lists = (data.lists || []).map((todoData) =>
+      Todo.fromData(todoData),
+    );
+    return folder;
   }
 
   addTodo(todo) {
@@ -116,7 +146,32 @@ class FolderManager {
 class TodoList {
   constructor() {
     this.listManager = new FolderManager();
-    this.defaultProject = this.listManager.addFolder("project");
+    this.init(); // load data from locastarage as soon as app starts
+  }
+
+  init() {
+    const savedDirectory = loadFromLocalStorage();
+
+    // check if there is data
+    if (savedDirectory && savedDirectory.length > 0) {
+      // rehydrate the whole folder tree
+      this.listManager.directory = savedDirectory.map((folderData) =>
+        Folder.fromData(folderData),
+      );
+      // keep track of default folder
+      this.defaultProject =
+        this.listManager.getFolderByName("project") ||
+        this.listManager.directory[0];
+    } else {
+      // fallback if local storaage is blank
+      this.defaultProject = this.listManager.addFolder("project");
+      this.save();
+    }
+  }
+
+  // create helper method to easily save the entire nested state
+  save() {
+    saveToLocalStorage(this.listManager.directory);
   }
 
   getAll() {
@@ -145,7 +200,7 @@ class TodoList {
 
     targetFolder.addTodo(newTodo);
 
-    saveToLocalStorage(this.getAll());
+    this.save();
     return newTodo;
   }
 
@@ -161,7 +216,7 @@ class TodoList {
       todo.dueDate = updates.dueDate ? new Date(updates.dueDate) : null;
 
     todo.updatedAt = new Date();
-    saveToLocalStorage(this.getAll());
+    this.save();
   }
 
   delete(todoId) {
@@ -176,7 +231,7 @@ class TodoList {
       }
     }
     if (!found) throw new Error("Todo not found anywhere!");
-    saveToLocalStorage(this.getAll());
+    this.save();
   }
 
   getAllCompletedTasks() {
