@@ -16,7 +16,7 @@ import {
   createListItem,
 } from "./branch";
 import { format } from "date-fns";
-import { renderGroupedTasks } from "./node";
+import { displayNumberOfTasks, renderGroupedTasks } from "./node";
 import { todoList } from "./template";
 
 // Hamburger method
@@ -152,6 +152,11 @@ function renderMainArea() {
     }
   },
 );
+
+// show number of tasks on sidebar buttons
+displayNumberOfTasks("number-of-upcoming", todoList.getAllUpcomingTasks());
+displayNumberOfTasks("number-of-completed", todoList.getAllCompletedTasks());
+displayNumberOfTasks("number-of-today", todoList.getAllTodayTasks());
 
 // Create a method for the add task button
 function getAddTaskForm() {

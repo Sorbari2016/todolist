@@ -189,4 +189,14 @@ function createConciseAddTaskForm() {
   return form;
 }
 
-export { createTaskTile, renderGroupedTasks };
+// Create a method to render the number of grouped task within sidebar
+function displayNumberOfTasks(elementId, numberOfTasks) {
+  // check if element exists
+  const el = document.getElementById(elementId);
+  if (!el) throw new Error("Element not found !");
+
+  // display content
+  el.textContent = numberOfTasks.length;
+}
+
+export { createTaskTile, renderGroupedTasks, displayNumberOfTasks };
