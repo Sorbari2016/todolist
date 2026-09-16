@@ -5,6 +5,7 @@ import categoryIcon from "../../assets/icons/category.png";
 import originDateIcon from "../../assets/icons/creation.png";
 import closeIcon from "../../assets/icons/close-icon.png";
 import { todoList } from "./template";
+import { createTaskTile } from "./node";
 
 // Create a dom method to render projects
 function renderMyProjects(projects) {
@@ -107,7 +108,7 @@ function search() {
   // select the input element
   const searchInput = searchTab.querySelector("#search");
 
-  // add a focus handler to the iput element
+  // add a focus handler to the input element
   searchInput.addEventListener("focus", () => {
     const existingBtn = searchTab.querySelector("#close-btn");
     // only run the creation code if it isnt there
@@ -149,35 +150,35 @@ function search() {
       </div>
     `;
 
-    // find lists
+    // find tasks
     const cleanQuery = query.trim();
     const matchedTasks = todoList.filterByChar(cleanQuery);
 
-    // select the query-result contaianer
+    // select the query-result contaianser
     const queiriesContainer = mainArea.querySelector(".query-result");
 
     // check if there are matches
-    if (matchedTasks.length > 0) {
+    if (query && matchedTasks.length > 0) {
       // const create an unordered list, & tasks class
       const list = document.createElement("ul");
       list.setAttribute("class", "tasks");
 
       matchedTasks.forEach((task) => {
         // create a list item
-        // const listItem = createTaskTile(task);
+        const listItem = createTaskTile(task);
         // append to underored list element
-        // list.appendChild(listItem);
+        list.appendChild(listItem);
       });
 
       // append unordered list to the queries div container
       queiriesContainer.appendChild(list);
+    } else {
+      // when there is not match
+      const paragraph = document.createElement("p");
+      paragraph.classList.add("no-tasks");
+      paragraph.textContent = "No task was found";
+      queiriesContainer.appendChild(paragraph);
     }
-
-    // when there is not match
-    const paragraph = document.createElement("p");
-    paragraph.classList.add("no-tasks");
-    paragraph.textContent = "No task was found";
-    queiriesContainer.appendChild(paragraph);
   });
 
   // add event delegation to listen close button click
