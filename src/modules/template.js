@@ -268,6 +268,29 @@ class TodoList {
       todo.title.toLowerCase().includes(char.toLowerCase()),
     );
   }
+
+  // FOLDER ACTIONS
+
+  // create wrapper methods to sync folder operations to local storage
+  createFolder(name) {
+    if (this.listManager.getFolderByName(name)) {
+      throw new Error("A folder with this name already exist!");
+    }
+
+    const newFolder = this.listManager.addFolder(name);
+    this.save(); // sync with local storage immediately
+    return newFolder;
+  }
+
+  renameFolder(folderId, newName) {
+    this.listManager.renameFolder(folderId, newName);
+    this.save();
+  }
+
+  removeFolder(folderId) {
+    this.listManager.deleteFolder(folderId);
+    this.save();
+  }
 }
 
 export const todoList = new TodoList();

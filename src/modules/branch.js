@@ -42,20 +42,21 @@ function renderMyProjects(projects) {
   // handle add project button
   const newProjectContainer = mainArea.querySelector(".new-project");
   const newProjectBtn = newProjectContainer.firstElementChild;
+
+  const form = createAddProjectForm();
   newProjectBtn.addEventListener("click", () => {
-    // create form
-    const form = createAddProjectForm();
+    // add open class to form
     form.classList.add("open");
 
     // replace Add project button with the form
     newProjectContainer.replaceChild(form, newProjectBtn);
-
-    // handle cancel & add button events
-    handleCancel(newProjectContainer, form, newProjectBtn);
-
-    // handle submit button event
-    handleSubmit(newProjectContainer, form, newProjectBtn);
   });
+
+  // handle cancel & add button events
+  handleCancel(newProjectContainer, form, newProjectBtn);
+
+  // handle submit button event
+  handleSubmit(newProjectContainer, form, newProjectBtn, "folder");
 }
 
 function addProject() {
@@ -72,7 +73,7 @@ function addProject() {
   handleCancel(projects, form, plusBtn);
 
   // manage submit button event
-  handleSubmit(projects, form, plusBtn);
+  handleSubmit(projects, form, plusBtn, "folder");
 }
 
 // Create a function to show, & remove sort popup content
@@ -238,7 +239,7 @@ function createAddProjectForm() {
             <div class="form-item">
                 <input
                     type="text"
-                    name="add-project"
+                    name="projectName"
                     id="project-name"
                     placeholder="Add a project"
                 >
@@ -259,23 +260,52 @@ function createAddProjectForm() {
 }
 
 // Create a method to handle cancel btn
-function handleCancel(parent, oldElement, newElelemt) {
-  oldElement.querySelector(".cancel-btn").addEventListener("click", () => {
-    oldElement.classList.remove("open");
-    parent.replaceChild(newElelemt, oldElement);
+function handleCancel(container, form, button) {
+  form.querySelector(".cancel-btn").addEventListener("click", () => {
+    form.classList.remove("open");
+    container.replaceChild(button, form);
   });
 }
 
 // Create a method to handle submit btn
-function handleSubmit(parent, oldElement, newElelemt) {
-  oldElement.addEventListener("submit", (e) => {
+function handleSubmit(container, form, button, itemType = "task") {
+  form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    // add project
-    // update local storage
+    // grabs all inputs that have a "name" attribute
+    const data = new FormData(form);
 
-    // replace elements
-    parent.replaceChild(newElelemt, oldElement);
+    // check the type of item (folder or list)
+    if (itemType === "task") {
+      // get values
+      const title = data.get("title")?.trim();
+      const desc = data.get("desc")?.trim();
+      const dueDate = data.get("dueDate")?.trim();
+      const notes = data.get("notes")?.trim();
+      const priorityLevel = data.get("priorityLevel")?.trim();
+
+      // ensure task has a title
+      if (!title) {
+        alert("Your task must have a title");
+        return;
+      }
+
+      // add task
+      todoList.add(title, desc, dueDate, priorityLevel, notes);
+    } else if (itemType === "folder") {
+      const folderName = data.get("projectName")?.trim();
+      if (!folderName) return alert("folder name cannot be empty!");
+
+      todoList.createFolder(folderName);
+
+      // re-render the projects area with updated structure
+      renderMyProjects(todoList.listManager.getFolders());
+    }
+
+    // reset form, & replace form with button
+    form.reset();
+    form.classList.remove("open");
+    container.replaceChild(button, form);
   });
 }
 
