@@ -1,6 +1,6 @@
 // Imports
 import ImportantIcon from "../../assets/icons/important_icon.png";
-import { handleCancel, handleSubmit } from "./branch";
+import { handleCancel, handleSubmit, renderMyProjects } from "./branch";
 import { format } from "date-fns";
 import { clearMainArea, mainArea } from "./dom";
 import { todoList } from "./template";
@@ -170,6 +170,57 @@ function renderOverdueTasks(tasks = []) {
   return section;
 }
 
+function renderProjectArea(projectName, tasks = []) {
+  // create markup
+  const container = document.createElement("div");
+  container.classList.add("project-container");
+  container.innerHTML = `
+  <div class="project-header">
+    <h1 class="project-title">${projectName}</h1>
+  </div>
+  <section class="task-container">
+    <ul class="tasks">
+    </ul>
+  </section>
+  <div class="project-area-action">
+    <button type="button" class="add-task-btn">Add Task </button>
+  </div>
+  <div class="project-area-nav item"> 
+    <button type="button" class="back-btn">Go back</button>
+  </div>
+  `;
+
+  // render tasks
+  const ul = container.querySelector(".tasks");
+  tasks.forEach((task) => {
+    ul.appendChild(createTaskTile(task));
+  });
+  mainArea.appendChild(container);
+
+  // handle back button
+  container.querySelector(".back-btn").addEventListener("click", () => {
+    const folders = todoList.listManager.directory;
+    renderMyProjects(folders);
+  });
+
+  const projectAreaAction = container.querySelector(".project-area-action");
+
+  // handle add task button
+  const form = createConciseAddTaskForm();
+
+  const addTaskBtn = container.querySelector(".add-task-btn");
+  addTaskBtn.addEventListener("click", () => {
+    form.classList.add("open");
+    projectAreaAction.replaceChild(form, addTaskBtn);
+  });
+
+  // handle cancel button action
+  handleCancel(projectAreaAction, form, addTaskBtn);
+
+  // handle add task button
+  handleSubmit(projectAreaAction, form, addTaskBtn, "task", projectName);
+}
+
 // UTILITY
 // Create a method for generation of a concise add task form.
 function createConciseAddTaskForm() {
@@ -198,4 +249,9 @@ function displayNumberOfTasks(elementId, numberOfTasks) {
   el.textContent = numberOfTasks.length;
 }
 
-export { createTaskTile, renderGroupedTasks, displayNumberOfTasks };
+export {
+  createTaskTile,
+  renderGroupedTasks,
+  displayNumberOfTasks,
+  renderProjectArea,
+};

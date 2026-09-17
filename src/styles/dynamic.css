@@ -107,10 +107,15 @@
   margin-bottom: 0.25rem;
 }
 
-.group-title {
+.group-title,
+.project-title {
   font-size: 1.4rem;
   font-weight: 600;
   margin: 0;
+}
+
+.project-title {
+  margin-bottom: 1.5rem;
 }
 
 .no-of-tasks {

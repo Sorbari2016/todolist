@@ -314,7 +314,8 @@
 }
 
 #new-project-form .cancel-btn,
-#new-project-form .add-project-btn {
+#new-project-form .add-project-btn,
+.project-area-nav .back-btn {
   padding: 0.45rem 1.1rem;
   border-radius: 6px;
   font-size: 0.9rem;
@@ -324,12 +325,14 @@
   transition: all 0.15s ease;
 }
 
-#new-project-form .cancel-btn {
+#new-project-form .cancel-btn,
+.project-area-nav .back-btn {
   background: transparent;
   color: #333;
 }
 
-#new-project-form .cancel-btn:hover {
+#new-project-form .cancel-btn:hover,
+.project-area-nav .back-btn:hover {
   text-decoration: underline;
 }
 
@@ -340,6 +343,16 @@
 
 #new-project-form .add-project-btn:hover {
   background: #3f51b5;
+}
+
+.project-area-action {
+  margin-top: 1.75rem;
+}
+
+.project-area-nav {
+  justify-content: flex-end;
+  margin-top: 0.25rem;
+  width: 95%;
 }
 
 /* Mobile */

@@ -5,7 +5,7 @@ import categoryIcon from "../../assets/icons/category.png";
 import originDateIcon from "../../assets/icons/creation.png";
 import closeIcon from "../../assets/icons/close-icon.png";
 import { todoList } from "./template";
-import { createTaskTile } from "./node";
+import { createTaskTile, renderProjectArea } from "./node";
 
 // Create a dom method to render projects
 function renderMyProjects(projects) {
@@ -33,11 +33,14 @@ function renderMyProjects(projects) {
   projects.forEach((project) => {
     const item = document.createElement("li");
     // each list should be a tile
-    item.classList.add("item");
+    item.classList.add("item", "folder");
     item.textContent = project.name;
 
     projectList.appendChild(item);
   });
+
+  // render project area for a particular project
+  createTaskInFolder();
 
   // handle add project button
   const newProjectContainer = mainArea.querySelector(".new-project");
@@ -57,6 +60,27 @@ function renderMyProjects(projects) {
 
   // handle submit button event
   handleSubmit(newProjectContainer, form, newProjectBtn, "folder");
+}
+
+// Create method to add task in a folder
+function createTaskInFolder() {
+  // select folders
+  const projects = document.querySelector(".projects-main");
+
+  // add listener
+  projects.addEventListener("click", (e) => {
+    const project = e.target.closest("li");
+
+    if (project && projects.contains(project)) {
+      // clear main area
+      clearMainArea();
+
+      const folderName = project.textContent;
+      const tasks = todoList.listManager.getFolderByName(folderName)?.lists;
+
+      renderProjectArea(folderName, tasks);
+    }
+  });
 }
 
 function addProject() {
@@ -268,7 +292,13 @@ function handleCancel(container, form, button) {
 }
 
 // Create a method to handle submit btn
-function handleSubmit(container, form, button, itemType = "task") {
+function handleSubmit(
+  container,
+  form,
+  button,
+  itemType = "task",
+  projectName = "project",
+) {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -283,6 +313,9 @@ function handleSubmit(container, form, button, itemType = "task") {
       const dueDate = data.get("dueDate")?.trim();
       const notes = data.get("notes")?.trim();
       const priorityLevel = data.get("priorityLevel")?.trim();
+      const folderName = projectName;
+
+      // get project name
 
       // ensure task has a title
       if (!title) {
@@ -291,7 +324,7 @@ function handleSubmit(container, form, button, itemType = "task") {
       }
 
       // add task
-      todoList.add(title, desc, dueDate, priorityLevel, notes);
+      todoList.add(title, desc, dueDate, priorityLevel, notes, folderName);
     } else if (itemType === "folder") {
       const folderName = data.get("projectName")?.trim();
       if (!folderName) return alert("folder name cannot be empty!");
