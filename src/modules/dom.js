@@ -16,7 +16,7 @@ import {
   createListItem,
 } from "./branch";
 import { format } from "date-fns";
-import { displayNumberOfTasks, renderGroupedTasks } from "./node";
+import { displayDate, displayNumberOfTasks, renderGroupedTasks } from "./node";
 import { todoList } from "./template";
 
 // Hamburger method
@@ -121,6 +121,10 @@ function renderMainArea() {
             </div>
           </div>
   `;
+
+  // Create dynamic date content
+  const now = new Date();
+  displayDate(now, "EEEE, MMMM d", ".today-date");
 
   // add listeners to Sort & Group buttons
   const toolbar = document.querySelector(".toolbar");
@@ -267,8 +271,7 @@ document.querySelectorAll(".click-btn").forEach((btn) => {
 
 // Create dynamic date content
 const now = new Date();
-const currentDay = `${format(now, "eeee")}, ${format(now, "MMMM d")}`;
-mainArea.querySelector(".today-date").textContent = currentDay;
+displayDate(now, "EEEE, MMMM d", ".today-date");
 
 // Create a reusable modal function
 function createModal(elementId, listDetails) {

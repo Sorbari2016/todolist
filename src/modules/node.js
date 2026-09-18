@@ -78,16 +78,13 @@ function renderGroupedTasks(groupTitle, groupedTasks = []) {
   const groupedTasksContainer = document.createElement("div");
   groupedTasksContainer.classList.add("grouped-task-container");
 
-  const now = new Date();
-  const currentDay = `${format(now, "eeee")}, ${format(now, "MMMM d")}`;
-
   const overdueTasks = renderOverdueTasks(todoList.getAllOverdueTasks());
 
   groupedTasksContainer.innerHTML = `
     <div class="group-header">
       <h1 class="group-title"> ${groupTitle}</h1>
       <div class="no-of-tasks">${groupedTasks.length}</div>
-      <div class="current-date">${currentDay}</div>
+      <div class="current-date"></div>
     </div>
     <hr/>
   `;
@@ -116,6 +113,10 @@ function renderGroupedTasks(groupTitle, groupedTasks = []) {
   }
 
   mainArea.appendChild(groupedTasksContainer);
+
+  // add date content
+  const now = new Date();
+  displayDate(now, "EEEE, MMMM d", ".current-date");
 }
 
 // Create a method to render overdue tasks
@@ -249,9 +250,19 @@ function displayNumberOfTasks(elementId, numberOfTasks) {
   el.textContent = numberOfTasks.length;
 }
 
+// Create a method to render date in any format usig date-fins
+function displayDate(date, dateFormat, targetElement) {
+  const el = document.querySelector(targetElement);
+
+  if (!el) throw new Error("Element doesnt exist in the DOM");
+
+  el.textContent = format(date, dateFormat);
+}
+
 export {
   createTaskTile,
   renderGroupedTasks,
   displayNumberOfTasks,
   renderProjectArea,
+  displayDate,
 };
