@@ -169,46 +169,50 @@
               </div>
             </div>
             <div class="toolbar-children"></div>
+            <!-- cards for sort/group appear here -->
           </div>
           <div class="flex-container">
             <div class="add-task-container">
-              <div class="add-task-top">
-                <input type="checkbox" class="checklist-btn" />
-                <input
-                  type="text"
-                  name="addTask"
-                  id="add-task"
-                  maxlength="255"
-                  placeholder="Add a task"
-                />
-              </div>
-              <div class="add-task-bottom">
-                <div class="add-task-icons">
-                  <ul>
-                    <li class="item main-item">
-                      <img
-                        src="../assets/icons/calendar.png"
-                        alt="calender icon"
-                      />
-                    </li>
-                    <li class="item main-item">
-                      <img
-                        src="../assets/icons/bell.png"
-                        alt="notification icon"
-                      />
-                    </li>
-                    <li class="item main-item">
-                      <img src="../assets/icons/repeat.png" alt="repeat icon" />
-                    </li>
-                  </ul>
+              <form action="#" class="add-task-form-concise-m">
+                <div class="add-task-top">
+                  <input type="checkbox" class="checklist-btn" />
+                  <input
+                    type="text"
+                    name="title"
+                    id="add-task"
+                    maxlength="255"
+                    placeholder="Add a task"
+                  />
                 </div>
-                <button id="add-btn" type="submit" class="click-btn">
-                  Add
-                </button>
-              </div>
+                <div class="add-task-bottom">
+                  <div class="add-task-icons">
+                    <ul>
+                      <li class="item main-item">
+                        <img
+                          src="../assets/icons/calendar.png"
+                          alt="calender icon"
+                        />
+                      </li>
+                      <li class="item main-item">
+                        <img
+                          src="../assets/icons/bell.png"
+                          alt="notification icon"
+                        />
+                      </li>
+                      <li class="item main-item">
+                        <img
+                          src="../assets/icons/repeat.png"
+                          alt="repeat icon"
+                        />
+                      </li>
+                    </ul>
+                  </div>
+                  <button id="add-btn" type="submit">Add</button>
+                </div>
+              </form>
             </div>
             <div class="added-task-list">
-              <ul></ul>
+              <ul class="tasks"></ul>
             </div>
           </div>
         </main>

@@ -152,7 +152,7 @@ function renderOverdueTasks(tasks = []) {
     handleCancel(section, form, addTaskBtn);
 
     // handle submit button click
-    handleSubmit(section, form, addTaskBtn);
+    handleSubmit(form, "task", "project", section, addTaskBtn);
 
     return section;
   }
@@ -219,7 +219,42 @@ function renderProjectArea(projectName, tasks = []) {
   handleCancel(projectAreaAction, form, addTaskBtn);
 
   // handle add task button
-  handleSubmit(projectAreaAction, form, addTaskBtn, "task", projectName);
+  handleSubmit(form, "task", projectName, projectAreaAction, addTaskBtn);
+}
+
+// Create function to add task in the main area
+function addMainAreaTask() {
+  // get main area static form
+  const form = mainArea.querySelector(".add-task-form-concise-m");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    // disable checkbox
+    const checkbox = form.querySelector("input[type='checkbox']");
+    checkbox.disbled = true;
+
+    // get data
+    const data = new FormData(form);
+    const title = data.get("title")?.trim();
+
+    if (!title) {
+      alert("Your task must have a title");
+      return;
+    }
+
+    const newTask = todoList.add(title);
+
+    if (newTask) {
+      // create newly created form tasks tile, & append to tasks
+      const tasks = mainArea.querySelector(".added-task-list .tasks");
+      const tile = createTaskTile(newTask);
+      tasks.appendChild(tile);
+    }
+
+    form.reset();
+    checkbox.disabled = false;
+  });
 }
 
 // UTILITY
@@ -265,4 +300,5 @@ export {
   displayNumberOfTasks,
   renderProjectArea,
   displayDate,
+  addMainAreaTask,
 };

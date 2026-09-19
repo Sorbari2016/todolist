@@ -16,7 +16,12 @@ import {
   createListItem,
 } from "./branch";
 import { format } from "date-fns";
-import { displayDate, displayNumberOfTasks, renderGroupedTasks } from "./node";
+import {
+  addMainAreaTask,
+  displayDate,
+  displayNumberOfTasks,
+  renderGroupedTasks,
+} from "./node";
 import { todoList } from "./template";
 
 // Hamburger method
@@ -83,41 +88,43 @@ function renderMainArea() {
           </div>
           <div class="flex-container">
             <div class="add-task-container">
-              <div class="add-task-top">
-                <input type="checkbox" class="checklist-btn" />
-                <input
-                  type="text"
-                  name="addTask"
-                  id="add-task"
-                  maxlength="255"
-                  placeholder="Add a task"
-                />
-              </div>
-              <div class="add-task-bottom">
-                <div class="add-task-icons">
-                  <ul>
-                    <li class="item main-item">
-                      <img
-                        src="${calendarIcon}"
-                        alt="calender icon"
-                      />
-                    </li>
-                    <li class="item main-item">
-                      <img
-                        src="${notificationIcon}"
-                        alt="notification icon"
-                      />
-                    </li>
-                    <li class="item main-item">
-                      <img src="${repeatIcon}" alt="repeat icon"/>
-                    </li>
-                  </ul>
+              <form action="#" class="add-task-form-concise-m">
+                <div class="add-task-top">
+                  <input type="checkbox" class="checklist-btn" />
+                  <input
+                    type="text"
+                    name="title"
+                    id="add-task"
+                    maxlength="255"
+                    placeholder="Add a task"
+                  />
                 </div>
-                <button id="add-btn" type="submit" class="click-btn">Add</button>
-              </div>
+                <div class="add-task-bottom">
+                  <div class="add-task-icons">
+                    <ul>
+                      <li class="item main-item">
+                        <img
+                          src="${calendarIcon}"
+                          alt="calender icon"
+                        />
+                      </li>
+                      <li class="item main-item">
+                        <img
+                          src="${notificationIcon}"
+                          alt="notification icon"
+                        />
+                      </li>
+                      <li class="item main-item">
+                        <img src="${repeatIcon}" alt="repeat icon"/>
+                      </li>
+                    </ul>
+                  </div>
+                  <button id="add-btn" type="submit" class="click-btn">Add</button>
+                </div>
+              </form>
             </div>
             <div class="added-task-list">
-              <ul></ul>
+              <ul class="tasks"></ul>
             </div>
           </div>
   `;
@@ -216,7 +223,8 @@ function getAddTaskForm() {
     e.preventDefault();
 
     // disable checkbox
-    form.querySelector("#checkbox").disabled = true;
+    const checkbox = form.querySelector("#checkbox");
+    checkbox.disabled = true;
 
     // get the other values
     const title = form.querySelector("#title").value.trim();
@@ -234,8 +242,9 @@ function getAddTaskForm() {
     // add task
     todoList.add(title, desc, dueDate, priorityLevel, notes);
 
-    // reset form
+    // reset form, & checkbox;
     form.reset();
+    checkbox.disabled = false;
   });
 }
 
@@ -260,8 +269,6 @@ document.querySelectorAll(".click-btn").forEach((btn) => {
       case "group":
         group();
         break;
-      case "add-btn":
-        addTask();
       default:
         // do nothing
         break;
@@ -272,6 +279,9 @@ document.querySelectorAll(".click-btn").forEach((btn) => {
 // Create dynamic date content
 const now = new Date();
 displayDate(now, "EEEE, MMMM d", ".today-date");
+
+// Create task from static input
+addMainAreaTask();
 
 // Create a reusable modal function
 function createModal(elementId, listDetails) {

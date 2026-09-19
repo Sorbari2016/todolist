@@ -107,9 +107,17 @@
   max-width: 520px;
   width: 100%;
   margin: 0 auto;
+}
+
+.add-task-form-concise-m {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
 }
 
 .add-task-top {
@@ -430,5 +438,21 @@
     left: auto;
     right: 0;
     transform: none;
+  }
+}
+
+@media (min-width: 900px) {
+  .add-task-container {
+    max-width: 100%;
+  }
+
+  .add-task-bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .add-task-icons ul {
+    justify-content: flex-start;
   }
 }

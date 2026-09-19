@@ -59,7 +59,7 @@ function renderMyProjects(projects) {
   handleCancel(newProjectContainer, form, newProjectBtn);
 
   // handle submit button event
-  handleSubmit(newProjectContainer, form, newProjectBtn, "folder");
+  handleSubmit(form, "folder", "", newProjectContainer, newProjectBtn);
 }
 
 // Create method to add task in a folder
@@ -97,7 +97,7 @@ function addProject() {
   handleCancel(projects, form, plusBtn);
 
   // manage submit button event
-  handleSubmit(projects, form, plusBtn, "folder");
+  handleSubmit(form, "folder", "", projects, plusBtn);
 }
 
 // Create a function to show, & remove sort popup content
@@ -293,14 +293,25 @@ function handleCancel(container, form, button) {
 
 // Create a method to handle submit btn
 function handleSubmit(
-  container,
   form,
-  button,
   itemType = "task",
   projectName = "project",
+  container = "",
+  button = "",
 ) {
+  // store newly created item object, (list or folder)
+  let newItem;
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
+
+    // check if form has a checkbox
+    const checkbox = form.querySelector("input [type='checkbox']");
+
+    if (checkbox) {
+      // disable checkbox
+      checkbox.disable = true;
+    }
 
     // grabs all inputs that have a "name" attribute
     const data = new FormData(form);
@@ -313,9 +324,9 @@ function handleSubmit(
       const dueDate = data.get("dueDate")?.trim();
       const notes = data.get("notes")?.trim();
       const priorityLevel = data.get("priorityLevel")?.trim();
-      const folderName = projectName;
 
       // get project name
+      const folderName = projectName;
 
       // ensure task has a title
       if (!title) {
@@ -324,12 +335,20 @@ function handleSubmit(
       }
 
       // add task
-      todoList.add(title, desc, dueDate, priorityLevel, notes, folderName);
+      newItem = todoList.add(
+        title,
+        desc,
+        dueDate,
+        priorityLevel,
+        notes,
+        folderName,
+      );
     } else if (itemType === "folder") {
       const folderName = data.get("projectName")?.trim();
+
       if (!folderName) return alert("folder name cannot be empty!");
 
-      todoList.createFolder(folderName);
+      newItem = todoList.createFolder(folderName);
 
       // re-render the projects area with updated structure
       renderMyProjects(todoList.listManager.getFolders());
@@ -337,9 +356,15 @@ function handleSubmit(
 
     // reset form, & replace form with button
     form.reset();
-    form.classList.remove("open");
-    container.replaceChild(button, form);
+
+    //  only replace when not using main area static input
+    if (container && button) {
+      form.classList.remove("open");
+      container.replaceChild(button, form);
+    }
   });
+
+  return newItem;
 }
 
 // Create a method to construct a list item for modal
