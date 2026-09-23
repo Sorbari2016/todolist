@@ -2,7 +2,7 @@
 import ImportantIcon from "../../assets/icons/important_icon.png";
 import { handleCancel, handleSubmit, renderMyProjects } from "./branch";
 import { format } from "date-fns";
-import { clearMainArea, mainArea } from "./dom";
+import { addTask, clearMainArea, mainArea } from "./dom";
 import { todoList } from "./template";
 
 // Create reusable markup method to create a task tile
@@ -63,11 +63,6 @@ function createTaskTile(task) {
   // return markup
   return taskItem;
 }
-
-// *
-// Today's tasks : overdue tasks, & just today's tasks
-// Completed tasks: overdue tasks, & all completed not more than one week before today
-// Upcoming tasks: Overdue tasks, today's tasks, & task for the next 7 days which are not completed.
 
 // Create a method to render grouped tasks
 function renderGroupedTasks(groupTitle, groupedTasks = []) {
@@ -152,7 +147,7 @@ function renderOverdueTasks(tasks = []) {
     handleCancel(section, form, addTaskBtn);
 
     // handle submit button click
-    handleSubmit(form, "task", "project", section, addTaskBtn);
+    handleSubmit(section, form, addTaskBtn, "task", "project");
 
     return section;
   }
@@ -219,41 +214,19 @@ function renderProjectArea(projectName, tasks = []) {
   handleCancel(projectAreaAction, form, addTaskBtn);
 
   // handle add task button
-  handleSubmit(form, "task", projectName, projectAreaAction, addTaskBtn);
+  handleSubmit(projectAreaAction, form, addTaskBtn, "task", projectName);
 }
 
 // Create function to add task in the main area
 function addMainAreaTask() {
-  // get main area static form
-  const form = mainArea.querySelector(".add-task-form-concise-m");
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    // disable checkbox
-    const checkbox = form.querySelector("input[type='checkbox']");
-    checkbox.disbled = true;
-
-    // get data
-    const data = new FormData(form);
-    const title = data.get("title")?.trim();
-
-    if (!title) {
-      alert("Your task must have a title");
-      return;
-    }
-
-    const newTask = todoList.add(title);
-
+  // add task
+  addTask(".add-task-form-concise-m", "concise", (newTask) => {
     if (newTask) {
       // create newly created form tasks tile, & append to tasks
       const tasks = mainArea.querySelector(".added-task-list .tasks");
       const tile = createTaskTile(newTask);
       tasks.appendChild(tile);
     }
-
-    form.reset();
-    checkbox.disabled = false;
   });
 }
 

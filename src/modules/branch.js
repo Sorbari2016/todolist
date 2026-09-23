@@ -59,7 +59,7 @@ function renderMyProjects(projects) {
   handleCancel(newProjectContainer, form, newProjectBtn);
 
   // handle submit button event
-  handleSubmit(form, "folder", "", newProjectContainer, newProjectBtn);
+  handleSubmit(newProjectContainer, form, newProjectBtn, "folder");
 }
 
 // Create method to add task in a folder
@@ -97,7 +97,7 @@ function addProject() {
   handleCancel(projects, form, plusBtn);
 
   // manage submit button event
-  handleSubmit(form, "folder", "", projects, plusBtn);
+  handleSubmit(projects, form, plusBtn, "folder");
 }
 
 // Create a function to show, & remove sort popup content
@@ -293,15 +293,13 @@ function handleCancel(container, form, button) {
 
 // Create a method to handle submit btn
 function handleSubmit(
+  container,
   form,
+  button,
   itemType = "task",
   projectName = "project",
-  container = "",
-  button = "",
 ) {
-  // store newly created item object, (list or folder)
-  let newItem;
-
+  // add handler to listen for submit event
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -310,7 +308,7 @@ function handleSubmit(
 
     if (checkbox) {
       // disable checkbox
-      checkbox.disable = true;
+      checkbox.disabled = true;
     }
 
     // grabs all inputs that have a "name" attribute
@@ -335,20 +333,13 @@ function handleSubmit(
       }
 
       // add task
-      newItem = todoList.add(
-        title,
-        desc,
-        dueDate,
-        priorityLevel,
-        notes,
-        folderName,
-      );
+      todoList.add(title, desc, dueDate, priorityLevel, notes, folderName);
     } else if (itemType === "folder") {
       const folderName = data.get("projectName")?.trim();
 
       if (!folderName) return alert("folder name cannot be empty!");
 
-      newItem = todoList.createFolder(folderName);
+      todoList.createFolder(folderName);
 
       // re-render the projects area with updated structure
       renderMyProjects(todoList.listManager.getFolders());
@@ -356,15 +347,9 @@ function handleSubmit(
 
     // reset form, & replace form with button
     form.reset();
-
-    //  only replace when not using main area static input
-    if (container && button) {
-      form.classList.remove("open");
-      container.replaceChild(button, form);
-    }
+    form.classList.remove("open");
+    container.replaceChild(button, form);
   });
-
-  return newItem;
 }
 
 // Create a method to construct a list item for modal

@@ -253,12 +253,11 @@ class TodoList {
 
   // overdue tasks are tasks whose duedate is behind today, & is not yet completed
   getAllOverdueTasks() {
-    const todayStr = new Date().toDateString();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     return this.getAll().filter(
       (todo) =>
-        todo.dueDate &&
-        todo.dueDate.toDateString() < todayStr &&
-        todo.checkList === false,
+        todo.dueDate && todo.dueDate < today && todo.checkList === false,
     );
   }
 

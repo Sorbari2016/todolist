@@ -217,34 +217,62 @@ function getAddTaskForm() {
     renderMainArea();
   });
 
-  // add event handler, for the submit button
+  // add task
+  addTask("#add-task-form", "complete", (newTask) => {
+    alert(`The task: ${newTask.title} has been created!`);
+  });
+}
+
+// Create a function to add task
+function addTask(formEl, formType = "Concise", onTaskCreated) {
+  // get the form
+  const form = document.querySelector(formEl);
+
+  // add a handler to listen for submit
   form.addEventListener("submit", (e) => {
-    // prevent form submitiing
+    // prevent form from submitting
     e.preventDefault();
 
-    // disable checkbox
-    const checkbox = form.querySelector("#checkbox");
+    // get checkbox and disable
+    const checkbox = form.querySelector("input[type='checkbox']");
     checkbox.disabled = true;
 
-    // get the other values
-    const title = form.querySelector("#title").value.trim();
-    const desc = form.querySelector("#desc").value.trim();
-    const dueDate = form.querySelector("#due-date").value.trim();
-    const notes = form.querySelector("#note").value.trim();
-    const priorityLevel = form.querySelector("#priority").value.trim();
+    // get form data
+    const data = new FormData(form);
+
+    // select title
+    const title = data.get("title")?.trim();
 
     // ensure task has a title
     if (!title) {
-      alert("Your task must have a title");
+      alert("Your task must have a title!");
+      checkbox.disabled = false;
       return;
     }
 
-    // add task
-    todoList.add(title, desc, dueDate, priorityLevel, notes);
+    let newTask; // to store created task
 
-    // reset form, & checkbox;
-    form.reset();
+    // check the type of form
+    if (formType === "concise") {
+      newTask = todoList.add(title);
+    } else if (formType === "complete") {
+      // get other values
+      const desc = data.get("desc")?.trim();
+      const dueDate = data.get("dueDate")?.trim();
+      const notes = data.get("notes")?.trim();
+      const priorityLevel = data.get("priority")?.trim();
+
+      newTask = todoList.add(title, desc, dueDate, priorityLevel, notes);
+    }
+
+    // pass the new task to the rest of the app
+    if (newTask && typeof onTaskCreated === "function") {
+      onTaskCreated(newTask);
+    }
+
+    // reset form, enable checkbox
     checkbox.disabled = false;
+    form.reset();
   });
 }
 
@@ -340,4 +368,5 @@ export {
   sortIcon,
   calendarIcon,
   priorityIcon,
+  addTask,
 };

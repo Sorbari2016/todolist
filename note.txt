@@ -60,7 +60,7 @@ things are suppose to be.
     a. Complete logic and method to add task via the Add Task Sidebar button
     b. Complete logic and method to add task via the main area
     c. Complete logic and method to add project via Sidebar
-    d. Complete logic and method to add logic via the main area
+    d. Complete logic and method to add projects via the main area
 11. Complete Update Tasks
     a. Create handler to handle task tile button click
     b. Create markup method update task
