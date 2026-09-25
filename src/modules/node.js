@@ -20,7 +20,12 @@ function createTaskTile(task) {
         </span>
         <button type="button" class="task-item-title-wrapper">
           <span class="task-item-title">${task.title}</span>
-          <span class="meta-data-info">Task</span>
+          <span class="meta-data-info">
+            <span class="meta-type">Task</span>
+            ${task.dueDate ? `<span class="meta-due">${format(task.dueDate, "EE-MMM-d")}</span>` : ""}
+            ${task.priority ? `<span class="meta-priority ${task.priority}">${task.priority}</span>` : ""}
+          </span>
+          </span>
         </button>
         <button type="button" class="importance-btn">
           <img src="${ImportantIcon}" alt="importance icon">

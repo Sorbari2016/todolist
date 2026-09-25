@@ -98,7 +98,9 @@ function renderTaskDetails(taskId, element) {
                   <input type="checkbox" id="${checkboxId}" class="checklist-btn">
                 </span>
                 <button type="button" class="task-item-title-wrapper">
-                  <span class="task-item-title">${task.title}</span>
+                  <span class="task-item-title">
+                      <input type="text" id="title" value="${task.title}">
+                  </span>
                   <span class="meta-data-info">Task</span>
                 </button>
                 <button type="button" class="importance-btn">

@@ -67,8 +67,35 @@
 }
 
 .meta-data-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 0.75rem;
-  opacity: 0.65;
+  opacity: 0.7;
+  flex-wrap: wrap;
+}
+
+.meta-priority {
+  text-transform: capitalize;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.meta-priority.low {
+  background: rgba(76, 175, 80, 0.15);
+  color: #2e7d32;
+}
+
+.meta-priority.medium {
+  background: rgba(255, 193, 7, 0.18);
+  color: #f57f17;
+}
+
+.meta-priority.high {
+  background: rgba(244, 67, 54, 0.15);
+  color: #c62828;
 }
 
 .importance-btn {
@@ -242,7 +269,7 @@ ul.tasks {
   flex-direction: row;
   align-items: stretch;
   gap: 1.5rem;
-  padding-right: 0; /* right pane can sit flush if you want */
+  padding-right: 0;
 }
 
 .left-main-area {
@@ -394,6 +421,33 @@ ul.tasks {
   width: 1.15rem;
   height: 1.15rem;
   display: block;
+}
+
+.details-header .task-item-title input[type="text"],
+.task-item-title input[type="text"] {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  font-family: inherit;
+  color: inherit;
+  outline: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    padding 0.15s ease;
+}
+
+.details-header .task-item-title input[type="text"]:focus,
+.task-item-title input[type="text"]:focus {
+  background: #fff;
+  padding: 0.3rem 0.5rem;
+  cursor: text;
+  box-shadow: 0 0 0 2px rgba(75, 95, 209, 0.25);
 }
 
 .details-main input[type="text"],
