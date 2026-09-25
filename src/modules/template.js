@@ -204,6 +204,24 @@ class TodoList {
     return newTodo;
   }
 
+  toggleComplete(todoId) {
+    const todo = this.getById(todoId);
+
+    if (!todo) throw new Error("todo not found!");
+
+    todo.toggleCheckList();
+    this.save();
+  }
+
+  changePriorityLevel(todoId, level) {
+    const todo = this.getById(todoId);
+
+    if (!todo) throw new Error("todo not found!");
+
+    todo.changePriority(level);
+    this.save();
+  }
+
   update(todoId, updates = {}) {
     const todo = this.getById(todoId);
     if (!todo) throw new Error("Todo not found!");

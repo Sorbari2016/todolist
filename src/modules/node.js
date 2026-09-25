@@ -4,6 +4,7 @@ import { handleCancel, handleSubmit, renderMyProjects } from "./branch";
 import { format } from "date-fns";
 import { addTask, clearMainArea, mainArea } from "./dom";
 import { todoList } from "./template";
+import { showTaskDetails, viewTaskDetails } from "./tree";
 
 // Create reusable markup method to create a task tile
 function createTaskTile(task) {
@@ -19,7 +20,7 @@ function createTaskTile(task) {
         </span>
         <button type="button" class="task-item-title-wrapper">
           <span class="task-item-title">${task.title}</span>
-          <span class="meta-data-info">Tasks</span>
+          <span class="meta-data-info">Task</span>
         </button>
         <button type="button" class="importance-btn">
           <img src="${ImportantIcon}" alt="importance icon">
@@ -44,7 +45,13 @@ function createTaskTile(task) {
   // handle checkbox click
   checkboxEl.addEventListener("change", () => {
     // toggle checklists
-    task.toggleCheckList();
+    todoList.toggleComplete(task.id);
+
+    // update sidebar completed tasks
+    displayNumberOfTasks(
+      "number-of-completed",
+      todoList.getAllCompletedTasks(),
+    );
   });
 
   // handle completed task
@@ -55,9 +62,19 @@ function createTaskTile(task) {
 
   // handle tile click for expansion
   tileBtn.addEventListener("click", () => {
-    tile.classList.add("expanded");
+    // remove background highlight from any other tile
+
+    document.querySelectorAll(".tile").forEach((task) => {
+      if (task !== tile) {
+        task.classList.remove("selected");
+      }
+    });
+
+    // highlight clicked tile
+    tile.classList.add("selected");
+
     // view task details
-    // viewTaskDetails(task)
+    showTaskDetails(task);
   });
 
   // return markup
@@ -274,4 +291,5 @@ export {
   renderProjectArea,
   displayDate,
   addMainAreaTask,
+  ImportantIcon,
 };
