@@ -4,7 +4,12 @@ import { handleCancel, handleSubmit, renderMyProjects } from "./branch";
 import { format } from "date-fns";
 import { addTask, clearMainArea, mainArea } from "./dom";
 import { todoList } from "./template";
-import { showTaskDetails, viewTaskDetails } from "./tree";
+import {
+  markTaskAsCompleted,
+  showTaskDetails,
+  updateTileUI,
+  viewTaskDetails,
+} from "./tree";
 
 // Create reusable markup method to create a task tile
 function createTaskTile(task) {
@@ -13,7 +18,7 @@ function createTaskTile(task) {
 
   // create markup
   const htmlString = `
-    <li class="item task-item">
+    <li class="item task-item" data-task-id="${task.id}">
       <div class="tile">
         <span class="checkbox">
           <input type="checkbox" id="${checkboxId}" class="checklist-btn">
@@ -47,28 +52,12 @@ function createTaskTile(task) {
   const titleEl = taskItem.querySelector(".task-item-title");
   const tileBtn = taskItem.querySelector(".task-item-title-wrapper");
 
-  // handle checkbox click
-  checkboxEl.addEventListener("change", () => {
-    // toggle checklists
-    todoList.toggleComplete(task.id);
+  updateTileUI(task, taskItem);
+  markTaskAsCompleted(task, taskItem);
 
-    // update sidebar completed tasks
-    displayNumberOfTasks(
-      "number-of-completed",
-      todoList.getAllCompletedTasks(),
-    );
-  });
-
-  // handle completed task
-  if (task.checkList) {
-    checkboxEl.checked = true;
-    titleEl.classList.add("strikethrough");
-  }
-
-  // handle tile click for expansion
+  // handle task tile click
   tileBtn.addEventListener("click", () => {
     // remove background highlight from any other tile
-
     document.querySelectorAll(".tile").forEach((task) => {
       if (task !== tile) {
         task.classList.remove("selected");

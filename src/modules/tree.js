@@ -4,9 +4,10 @@ import deleteIcon from "../../assets/icons/trash.png";
 import descriptionIcon from "../../assets/icons/description.png";
 import noteIcon from "../../assets/icons/notes.png";
 import { calendarIcon, clearMainArea, mainArea, priorityIcon } from "./dom";
-import { displayDate, ImportantIcon } from "./node";
+import { displayDate, ImportantIcon, displayNumberOfTasks } from "./node";
 
 console.log(todoList.listManager.directory);
+console.log(todoList.getAll().length);
 
 // Create a details block
 function createDetailBlock({
@@ -53,6 +54,10 @@ function showTaskDetails(task) {
     renderTaskDetails(task.id, rightMain);
     // get created date
     displayDate(task.createdAt, "EE, MMMM d", ".date-created");
+    const tile = rightMain.querySelector(".item.detail");
+
+    updateTileUI(task, tile);
+    markTaskAsCompleted(task, tile);
     return;
   }
   // Divide main area into two portions
@@ -75,6 +80,10 @@ function showTaskDetails(task) {
 
   // get created date
   displayDate(task.createdAt, "EE, MMMM d", ".date-created");
+
+  const tile = rightMain.querySelector(".item.detail");
+  updateTileUI(task, tile);
+  markTaskAsCompleted(task, tile);
 }
 
 // Create a method to render the details markup on the right side
@@ -92,7 +101,7 @@ function renderTaskDetails(taskId, element) {
    <div class="details-pane">
       <div class="details-body">
         <ul class="details-header">
-          <li class="item detail">
+          <li class="item detail" data-task-id="${task.id}">
               <div class="task-title">
                 <span class="checkbox">
                   <input type="checkbox" id="${checkboxId}" class="checklist-btn">
@@ -144,4 +153,48 @@ function renderTaskDetails(taskId, element) {
   return element.appendChild(template.content.firstElementChild);
 }
 
-export { showTaskDetails };
+function updateTileUI(task, tile) {
+  const isChecked = task.checkList;
+
+  const checkbox = tile.querySelector("input[type='checkbox']");
+  const title = tile.querySelector(".task-item-title");
+
+  if (checkbox && title) {
+    if (isChecked) {
+      checkbox.checked = true;
+      title.classList.add("strikethrough");
+    } else {
+      checkbox.checked = false;
+      title.classList.remove("strikethrough");
+    }
+  }
+}
+
+// Create a method to toggle checkbox, & update task
+function markTaskAsCompleted(task, tile) {
+  // get checkbox element
+  const checkbox = tile.querySelector("input[type='checkbox']");
+
+  if (!checkbox) return; // check if in the dom
+
+  // add a handler to listen for checkbox click
+  checkbox.addEventListener("change", () => {
+    todoList.toggleComplete(task.id);
+
+    // get task tile, & its & tile within expanded form
+    const matchingTiles = document.querySelectorAll(
+      `[data-task-id="${task.id}"]`,
+    );
+    sameTask.forEach((matchingTile) => {
+      updateTileUI(task, matchingTile);
+    });
+
+    // update the number of completed task UI on sidebar
+    displayNumberOfTasks(
+      "number-of-completed",
+      todoList.getAllCompletedTasks(),
+    );
+  });
+}
+
+export { showTaskDetails, updateTileUI, markTaskAsCompleted };
