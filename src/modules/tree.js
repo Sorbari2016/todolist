@@ -5,6 +5,7 @@ import descriptionIcon from "../../assets/icons/description.png";
 import noteIcon from "../../assets/icons/notes.png";
 import { calendarIcon, clearMainArea, mainArea, priorityIcon } from "./dom";
 import { displayDate, ImportantIcon, displayNumberOfTasks } from "./node";
+import { format } from "date-fns";
 
 console.log(todoList.listManager.directory);
 console.log(todoList.getAll().length);
@@ -15,22 +16,26 @@ function createDetailBlock({
   inputType,
   id,
   name,
+  value,
   placeholder = "",
   options = [],
 }) {
   let inputElement = "";
 
   if (inputType === "textarea") {
-    inputElement = `<textarea id="${id}" name="${name}" class="change" placeholder="${placeholder}"></textarea>`;
+    inputElement = `<textarea id="${id}" name="${name}" class="change" placeholder="${placeholder}">${value || ""}</textarea>`;
   } else if (inputType === "select") {
+    // loop through options and add 'selected' if the value matches
     const optionElements = options
-      .map(
-        (option) => `<option value="${option.value}">${option.label}</option>`,
-      )
+      .map((option) => {
+        const isSelected = option.value === value ? "selected" : "";
+        return `<option value="${option.value}" ${isSelected}>${option.label}</option>`;
+      })
       .join("");
-    inputElement = `<select id="${id}" name ="${name}" class="change">${optionElements}</select>`;
+
+    inputElement = `<select id="${id}" name="${name}" class="change">${optionElements}</select>`;
   } else {
-    inputElement = `<input type="${inputType}" id="${id}" name="${name}" class="change" placeholder="${placeholder}">`;
+    inputElement = `<input type="${inputType}" id="${id}" name="${name}" value="${value || ""}" class="change" placeholder="${placeholder}">`;
   }
 
   return `
@@ -58,6 +63,7 @@ function showTaskDetails(task) {
 
     updateTileUI(task, tile);
     markTaskAsCompleted(task, tile);
+    updateTask(task.id);
     return;
   }
   // Divide main area into two portions
@@ -84,6 +90,7 @@ function showTaskDetails(task) {
   const tile = rightMain.querySelector(".item.detail");
   updateTileUI(task, tile);
   markTaskAsCompleted(task, tile);
+  updateTask(task.id);
 }
 
 // Create a method to render the details markup on the right side
@@ -108,7 +115,7 @@ function renderTaskDetails(taskId, element) {
                 </span>
                 <button type="button" class="task-item-title-wrapper">
                   <span class="task-item-title">
-                      <input type="text" id="title" value="${task.title}">
+                      <input type="text" id="title" name="title" value="${task.title}" class="change">
                   </span>
                   <span class="meta-data-info">Task</span>
                 </button>
@@ -119,14 +126,15 @@ function renderTaskDetails(taskId, element) {
           </li>
         </ul>
         <div class="details-main">
-            ${createDetailBlock({ icon: descriptionIcon, inputType: "textarea", id: "description", name: "desc", placeholder: "Description" })}
-            ${createDetailBlock({ icon: calendarIcon, inputType: "date", id: "dueDate", name: "dueDate" })}
-            ${createDetailBlock({ icon: noteIcon, inputType: "textarea", id: "note", name: "note", placeholder: "Add a Note..." })}
+            ${createDetailBlock({ icon: descriptionIcon, inputType: "textarea", id: "description", name: "desc", value: task.desc, placeholder: "Description" })}
+            ${createDetailBlock({ icon: calendarIcon, inputType: "date", id: "dueDate", name: "dueDate", value: task.dueDate ? format(new Date(task.dueDate), "yyyy-MM-dd") : "" })}
+            ${createDetailBlock({ icon: noteIcon, inputType: "textarea", id: "notes", name: "notes", value: task.notes, placeholder: "Add a Note..." })}
             ${createDetailBlock({
               icon: priorityIcon,
               inputType: "select",
               id: "priority",
               name: "priority",
+              value: task.priority,
               options: [
                 { value: "", label: "--Select a priority level--" },
                 { value: "low", label: "Low" },
@@ -140,7 +148,7 @@ function renderTaskDetails(taskId, element) {
       <div class="details-footer">
          <span class="item">
             <div class="date-created">Created on</div>
-            <button type="button">
+            <button type="button" id="delete-btn">
                 <img src="${deleteIcon}" alt="delete icon">
             </button>
          </span>
@@ -194,6 +202,49 @@ function markTaskAsCompleted(task, tile) {
       "number-of-completed",
       todoList.getAllCompletedTasks(),
     );
+  });
+}
+
+// Create a method to update task properties
+function updateTask(taskId) {
+  // get controls
+  const controls = document.querySelectorAll(".change");
+
+  if (controls.length === 0) return; // check if details pane is open
+
+  // add handler to each of the controls to listen for change
+  controls.forEach((control) => {
+    control.addEventListener("change", (e) => {
+      // get the name and value attr of a control
+      const { name, value } = e.target;
+
+      // get the tile of the task
+      const matchingTile = document.querySelector(`[data-task-id="${taskId}"]`);
+
+      // get task
+      const task = todoList.getById(taskId);
+
+      // check if the control is the select element
+      if (name === "priority") {
+        todoList.changePriorityLevel(taskId, value);
+        // update tile
+        matchingTile.querySelector(".meta-priority").textContent =
+          task.priority;
+      } else {
+        // for the others
+        const update = { [name]: value };
+        console.log(update);
+        todoList.update(taskId, update); // using computed property names
+
+        // update tile for dueDate
+        if (name === "dueDate") {
+          matchingTile.querySelector(".meta-due").textContent = format(
+            task.dueDate,
+            "EE-MMM-d",
+          );
+        }
+      }
+    });
   });
 }
 
