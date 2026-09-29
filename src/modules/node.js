@@ -165,7 +165,7 @@ function renderOverdueTasks(tasks = []) {
 
   // create list container
   const ul = document.createElement("ul");
-  ul.className = "task-list";
+  ul.className = "tasks";
 
   // create overdue tasks tiles
   tasks.forEach((task) => {
