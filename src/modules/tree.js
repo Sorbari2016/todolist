@@ -64,6 +64,7 @@ function showTaskDetails(task) {
     updateTileUI(task, tile);
     markTaskAsCompleted(task, tile);
     updateTask(task.id);
+    deleteTask(task.id);
     return;
   }
   // Divide main area into two portions
@@ -91,6 +92,7 @@ function showTaskDetails(task) {
   updateTileUI(task, tile);
   markTaskAsCompleted(task, tile);
   updateTask(task.id);
+  deleteTask(task.id);
 }
 
 // Create a method to render the details markup on the right side
@@ -245,6 +247,30 @@ function updateTask(taskId) {
         }
       }
     });
+  });
+}
+
+// Create method to delete a task
+function deleteTask(taskId) {
+  // get delete button
+  const deleteBtn = document.getElementById("delete-btn");
+
+  if (!deleteBtn) return; // check if details pane is opened
+
+  // add a handler to listen for delete button click
+  deleteBtn.addEventListener("click", () => {
+    // delete task
+    todoList.delete(taskId);
+
+    // remove details pane & tile
+    mainArea.querySelector(".right-main-area").remove();
+    mainArea.querySelector(`[data-task-id="${taskId}"]`).remove();
+
+    // restructure the main area
+    const leftMain = mainArea.querySelector(".left-main-area");
+    const leftAreaContents = leftMain.children[0];
+    mainArea.replaceChild(leftAreaContents, leftMain);
+    leftMain.remove();
   });
 }
 
