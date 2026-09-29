@@ -7,9 +7,6 @@ import { calendarIcon, clearMainArea, mainArea, priorityIcon } from "./dom";
 import { displayDate, ImportantIcon, displayNumberOfTasks } from "./node";
 import { format } from "date-fns";
 
-console.log(todoList.listManager.directory);
-console.log(todoList.getAll().length);
-
 // Create a details block
 function createDetailBlock({
   icon,

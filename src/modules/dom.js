@@ -192,7 +192,7 @@ function getAddTaskForm() {
             <input type="date" id="due-date" name="dueDate">
         </div>
         <div class="form-item">
-            <input type="text" name="note" id="note" placeholder="Add a note...">
+            <input type="text" name="notes" id="note" placeholder="Add a note...">
         </div>
         <div class="form-item">
             <img src="${priorityIcon}" alt="priority icon">

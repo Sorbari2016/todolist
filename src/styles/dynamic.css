@@ -1,7 +1,4 @@
 /* RULES FOR DYNAMIC CONTENTS IN THE MAIN AREA */
-.strikethrough {
-  text-decoration: line-through;
-}
 
 .tile.selected {
   background-color: var(--bg-accent);
