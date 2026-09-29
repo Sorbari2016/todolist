@@ -158,7 +158,7 @@ function renderOverdueTasks(tasks = []) {
     handleCancel(section, form, addTaskBtn);
 
     // handle submit button click
-    handleSubmit(section, form, addTaskBtn, "task", "project");
+    handleSubmit(section, form, addTaskBtn, "task", "Project");
 
     return section;
   }
@@ -181,13 +181,19 @@ function renderProjectArea(projectName, tasks = []) {
   // create markup
   const container = document.createElement("div");
   container.classList.add("project-container");
+
+  // check if there's no task yet
+  let info = "";
+  if (tasks.length === 0) {
+    info = `<p class="no-task">No tasks yet</p>`;
+  }
+
   container.innerHTML = `
   <div class="project-header">
     <h1 class="project-title">${projectName}</h1>
   </div>
   <section class="task-container">
-    <ul class="tasks">
-    </ul>
+  ${info ? info : `<ul class="tasks"></ul>`}
   </section>
   <div class="project-area-action">
     <button type="button" class="add-task-btn">Add Task </button>

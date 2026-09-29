@@ -30,6 +30,7 @@ function renderMyProjects(projects) {
 
   // create project list items
   const projectList = document.querySelector(".projects-main");
+
   projects.forEach((project) => {
     const item = document.createElement("li");
     // each list should be a tile
@@ -297,7 +298,7 @@ function handleSubmit(
   form,
   button,
   itemType = "task",
-  projectName = "project",
+  projectName = "Project",
 ) {
   // add handler to listen for submit event
   form.addEventListener("submit", (e) => {

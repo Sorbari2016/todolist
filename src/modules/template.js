@@ -160,11 +160,11 @@ class TodoList {
       );
       // keep track of default folder
       this.defaultProject =
-        this.listManager.getFolderByName("project") ||
+        this.listManager.getFolderByName("Project") ||
         this.listManager.directory[0];
     } else {
       // fallback if local storaage is blank
-      this.defaultProject = this.listManager.addFolder("project");
+      this.defaultProject = this.listManager.addFolder("Project");
       this.save();
     }
   }
@@ -188,7 +188,7 @@ class TodoList {
     dueDate = null,
     priority = "low",
     notes = "",
-    projectName = "project",
+    projectName = "Project",
   ) {
     const newTodo = new Todo(title, desc, dueDate, priority, notes);
 
@@ -207,7 +207,7 @@ class TodoList {
   toggleComplete(todoId) {
     const todo = this.getById(todoId);
 
-    if (!todo) throw new Error("todo not found!");
+    if (!todo) throw new Error("Todo not found!");
 
     todo.toggleCheckList();
     this.save();
@@ -216,7 +216,7 @@ class TodoList {
   changePriorityLevel(todoId, level) {
     const todo = this.getById(todoId);
 
-    if (!todo) throw new Error("todo not found!");
+    if (!todo) throw new Error("Todo not found!");
 
     todo.changePriority(level);
     this.save();

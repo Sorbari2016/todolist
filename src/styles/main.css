@@ -363,6 +363,11 @@
   width: 95%;
 }
 
+.no-task {
+  font-style: italic;
+  color: gray;
+}
+
 /* Mobile */
 @media (max-width: 600px) {
   #new-project-form {
